@@ -1,8 +1,10 @@
 ﻿using HomeApi.Web.Services.Config;
 using HomeApi.Web.Services.Lighting.Exceptions;
+using HomeApi.Web.Services.Lighting.Models;
 using Q42.HueApi;
 using Q42.HueApi.Models.Bridge;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,9 +30,7 @@ namespace HomeApi.Web.Services.Lighting.Hue
 
             try
             {
-                var bridges = await GetBridgesAsync();
-
-                var client = new LocalHueClient(bridges.First().IpAddress);
+                var client = await GetClientAsync();
 
                 config.Lighting.HueAppKey = await client.RegisterAsync("HomeApi", "HomeApiServer");
 
@@ -46,6 +46,13 @@ namespace HomeApi.Web.Services.Lighting.Hue
             }            
         }
 
+        private async Task<LocalHueClient> GetClientAsync()
+        {
+            var bridges = await GetBridgesAsync();
+
+            return new LocalHueClient(bridges.First().IpAddress);
+        }
+
         private async Task<LocatedBridge[]> GetBridgesAsync()
         {
             if (bridges == null)
@@ -56,7 +63,31 @@ namespace HomeApi.Web.Services.Lighting.Hue
                 bridges = locatedBridges.ToArray();
             }
 
+            if (!bridges.Any())
+            {
+                throw new Exception("No Hue bridges were detected on the local network.");
+            }
+
             return bridges;
+        }
+
+        public async Task<IEnumerable<Models.Light>> GetLightsAsync()
+        {
+            var client = await GetClientAsync();
+
+            var hueLights = await client.GetLightsAsync();
+
+            return hueLights.Select(l => new Models.Light(l.Id, l.State.On));
+        }
+
+        public Task TurnOnAsync(Models.Light light)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task TurnOffAsync(Models.Light light)
+        {
+            throw new NotImplementedException();
         }
     }
 }

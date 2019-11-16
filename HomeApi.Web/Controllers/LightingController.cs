@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using HomeApi.Web.Services.Lighting;
+using HomeApi.Web.Services.Lighting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeApi.Web.Controllers
@@ -16,9 +17,27 @@ namespace HomeApi.Web.Controllers
         [Route("/api/lighting/register")]
         public async Task<IActionResult> Register()
         {
-            await lighting.RegisterAsync();
+            try
+            {
+                await lighting.RegisterAsync();
 
-            return Ok();
+                return Ok(new
+                {
+                    Success = true
+                });
+            } catch (RegistrationFailedException exception)
+            {
+                return BadRequest(new
+                {
+                    Success = false,
+                    Details = exception.Message
+                });
+            }
+        }
+
+        public async Task<IActionResult> TurnLightOn()
+        {
+
         }
     }
 }

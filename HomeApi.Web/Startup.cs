@@ -30,9 +30,9 @@ namespace HomeApi.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddMvc();
 
-            services.AddSingleton<IConfigService>(s => ConfigService.Load(contentRoot, s.GetRequiredService<ILogger<ConfigService>>()));
+            services.AddSingleton<IConfigService>(s => ConfigService.Load(s.GetRequiredService<ILogger<ConfigService>>()));
 
             services.AddSingleton<ILightingService>(s => new HueLightingService(s.GetService<IConfigService>()));
         }
