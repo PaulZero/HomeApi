@@ -6,14 +6,8 @@ using System.Threading.Tasks;
 
 namespace HomeApi.Web.Services.Config
 {
-    public interface IConfigService
+    public class Configuration
     {
-        Configuration Config { get; }
-
-        bool IsDevelopmentMode { get; }
-
-        void Save();
-
-        Task SaveAsync();
+        public LightingConfig Lighting { get; set; } = new LightingConfig();
     }
 }

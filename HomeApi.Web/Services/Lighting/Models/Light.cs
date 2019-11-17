@@ -3,13 +3,13 @@
     public class Light
     {
         public string Id { get; }
+        
+        public string Name { get; }
 
-        public bool IsOn { get; }
-
-        public Light(string id, bool isOn)
+        public Light(string id, string name)
         {
             Id = id;
-            IsOn = isOn;
+            Name = name;
         }
     }
 }

@@ -18,4 +18,8 @@
     <PackageReference Include="Q42.HueApi" Version="3.12.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="config\" />
+  </ItemGroup>
+
 </Project>

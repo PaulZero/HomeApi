@@ -32,7 +32,9 @@ namespace HomeApi.Web
         {
             services.AddMvc();
 
-            services.AddSingleton<IConfigService>(s => ConfigService.Load(s.GetRequiredService<ILogger<ConfigService>>()));
+            services.AddLogging();
+
+            services.AddSingleton<IConfigService>(s => new ConfigService(s.GetRequiredService<IWebHostEnvironment>(), s.GetRequiredService<ILogger<ConfigService>>()));
 
             services.AddSingleton<ILightingService>(s => new HueLightingService(s.GetService<IConfigService>()));
         }

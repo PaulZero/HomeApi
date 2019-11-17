@@ -1,40 +1,50 @@
 ﻿using HomeApi.Web.Services.Config;
+using HomeApi.Web.Services.Lighting.Config;
 using HomeApi.Web.Services.Lighting.Exceptions;
 using HomeApi.Web.Services.Lighting.Models;
 using Q42.HueApi;
+using Q42.HueApi.Models;
 using Q42.HueApi.Models.Bridge;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using HueLight = Q42.HueApi.Light;
+
 namespace HomeApi.Web.Services.Lighting.Hue
 {
     public class HueLightingService : ILightingService
     {
-        private readonly IConfigService config;
+        private IConfigService ConfigService { get; }
+
+        private LightingConfig Config => ConfigService.Config.Lighting;
 
         private LocatedBridge[] bridges;
 
+        private LocalHueClient client;
+
         public HueLightingService(IConfigService configService)
         {
-            config = configService;
+            ConfigService = configService;
         }
 
         public async Task RegisterAsync()
-        {
-            if (config.Lighting.HueAppKey != null)
+        {            
+            if (Config.HueAppKey != null)
             {
-                return;
+                throw new Exception("HueBridge is already registered.");
             }
 
             try
             {
-                var client = await GetClientAsync();
+                var bridges = await GetBridgesAsync();
 
-                config.Lighting.HueAppKey = await client.RegisterAsync("HomeApi", "HomeApiServer");
+                var client = new LocalHueClient(bridges.First().IpAddress);
 
-                await config.SaveAsync();                
+                Config.HueAppKey = await client.RegisterAsync("HomeApi", "HomeApiServer");
+
+                await ConfigService.SaveAsync();                
             }
             catch (LinkButtonNotPressedException)
             {
@@ -43,14 +53,49 @@ namespace HomeApi.Web.Services.Lighting.Hue
             catch (Exception exception)
             {
                 throw new RegistrationFailedException($"The Hue bridge could not be registered: {exception.Message}");
-            }            
+            }
+        }
+
+        public async Task<IEnumerable<Models.Light>> GetLightsAsync()
+        {
+            var client = await GetClientAsync();
+
+            var hueLights = await client.GetLightsAsync();
+
+            return hueLights.Select(l => new Models.Light(l.Id, l.Name));
+        }
+
+        public async Task TurnOnAsync(string id)
+        {
+            var client = await GetClientAsync();
+
+            await client.SendCommandAsync(new LightCommand() { On = true, Brightness = 255, TransitionTime = Config.FadeTime }, new[] { id });
+        }
+
+        public async Task TurnOffAsync(string id)
+        {
+            var client = await GetClientAsync();
+
+            await client.SendCommandAsync(new LightCommand() { On = false, TransitionTime = Config.FadeTime }, new[] { id });
         }
 
         private async Task<LocalHueClient> GetClientAsync()
         {
-            var bridges = await GetBridgesAsync();
+            if (string.IsNullOrWhiteSpace(Config.HueAppKey))
+            {
+                throw new Exception("Hue has not yet been initialised.");
+            }
+            
+            if (client == null)
+            {
+                var bridges = await GetBridgesAsync();
 
-            return new LocalHueClient(bridges.First().IpAddress);
+                client = new LocalHueClient(bridges.First().IpAddress);
+
+                client.Initialize(Config.HueAppKey);
+            }
+
+            return client;
         }
 
         private async Task<LocatedBridge[]> GetBridgesAsync()
@@ -71,23 +116,13 @@ namespace HomeApi.Web.Services.Lighting.Hue
             return bridges;
         }
 
-        public async Task<IEnumerable<Models.Light>> GetLightsAsync()
+        private async Task<HueLight> GetLightById(string id)
         {
             var client = await GetClientAsync();
 
             var hueLights = await client.GetLightsAsync();
 
-            return hueLights.Select(l => new Models.Light(l.Id, l.State.On));
-        }
-
-        public Task TurnOnAsync(Models.Light light)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task TurnOffAsync(Models.Light light)
-        {
-            throw new NotImplementedException();
+            return hueLights.FirstOrDefault(l => l.Id == id);
         }
     }
 }

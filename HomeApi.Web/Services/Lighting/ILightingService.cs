@@ -12,8 +12,8 @@ namespace HomeApi.Web.Services.Lighting
 
         Task<IEnumerable<Light>> GetLightsAsync();
 
-        Task TurnOnAsync(Light light);
+        Task TurnOnAsync(string id);
 
-        Task TurnOffAsync(Light light);
+        Task TurnOffAsync(string id);
     }
 }
