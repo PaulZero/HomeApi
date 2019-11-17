@@ -1,40 +1,112 @@
-﻿using HomeApi.Web.Services.Config;
-using HomeApi.Web.Services.Lighting.Config;
-using HomeApi.Web.Services.Lighting.Exceptions;
-using HomeApi.Web.Services.Lighting.Models;
-using Q42.HueApi;
-using Q42.HueApi.Models;
-using Q42.HueApi.Models.Bridge;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using HueLight = Q42.HueApi.Light;
+using HomeApi.Web.Services.Config;
+using HomeApi.Web.Services.Lighting.Config;
+using HomeApi.Web.Services.Lighting.Exceptions;
+using HomeApi.Web.Services.Lighting.Hue.Models;
+using HomeApi.Web.Services.Lighting.RequestModels;
+using Q42.HueApi;
+using Q42.HueApi.Models.Bridge;
+using Q42.HueApi.Models.Groups;
 
 namespace HomeApi.Web.Services.Lighting.Hue
 {
     public class HueLightingService : ILightingService
     {
+        private LightingConfig Config => ConfigService.Config.Lighting;
         private IConfigService ConfigService { get; }
 
-        private LightingConfig Config => ConfigService.Config.Lighting;
+        private LocatedBridge[] _bridges;
 
-        private LocatedBridge[] bridges;
-
-        private LocalHueClient client;
+        private LocalHueClient _client;
 
         public HueLightingService(IConfigService configService)
         {
             ConfigService = configService;
         }
 
-        public async Task RegisterAsync()
-        {            
-            if (Config.HueAppKey != null)
+        public async Task SetGroupStateAsync(SetGroupStateRequest request)
+        {
+            var client = await GetClientAsync();
+            var groups = await FindAllGroupsAsync();
+
+            var lightIds = groups.Where(g => request.GroupIds.Contains(g.Id))
+                .SelectMany(g => g.Lights)
+                .Distinct();
+
+            var command = new LightCommand
             {
-                throw new Exception("HueBridge is already registered.");
+                On = request.PowerState,
+                Brightness = request.Brightness,
+                TransitionTime = request.TransitionTime ?? Config.TransitionTime
+            };
+
+            await client.SendCommandAsync(command, lightIds);
+        }
+
+        private async Task<IEnumerable<Group>> FindAllGroupsAsync()
+        {
+            var client = await GetClientAsync();
+
+            return await client.GetGroupsAsync();
+        }
+
+        private async Task<IEnumerable<Light>> FindAllLightsAsync()
+        {
+            var client = await GetClientAsync();
+
+            return await client.GetLightsAsync();
+        }
+
+        private async Task<LocatedBridge[]> GetBridgesAsync()
+        {
+            if (_bridges == null)
+            {
+                var locator = new HttpBridgeLocator();
+                var locatedBridges = await locator.LocateBridgesAsync(Config.SearchTimeout);
+
+                _bridges = locatedBridges.ToArray();
             }
+
+            if (!_bridges.Any()) throw new Exception("No Hue bridges were detected on the local network.");
+
+            return _bridges;
+        }
+
+        private async Task<LocalHueClient> GetClientAsync()
+        {
+            if (string.IsNullOrWhiteSpace(Config.HueAppKey)) throw new Exception("Hue has not yet been initialised.");
+
+            if (_client == null)
+            {
+                var bridges = await GetBridgesAsync();
+
+                _client = new LocalHueClient(bridges.First().IpAddress);
+
+                _client.Initialize(Config.HueAppKey);
+            }
+
+            return _client;
+        }
+
+        private async Task<Group> FindGroupByIdAsync(string id)
+        {
+            var groups = await FindAllGroupsAsync();
+            var selectedGroup = groups.FirstOrDefault(g => g.Id == id);
+
+            if (selectedGroup == null)
+            {
+                throw new UnknownGroupException(id);
+            }
+
+            return selectedGroup;
+        }
+
+        public async Task RegisterAsync()
+        {
+            if (Config.HueAppKey != null) throw new Exception("HueBridge is already registered.");
 
             try
             {
@@ -44,11 +116,12 @@ namespace HomeApi.Web.Services.Lighting.Hue
 
                 Config.HueAppKey = await client.RegisterAsync("HomeApi", "HomeApiServer");
 
-                await ConfigService.SaveAsync();                
+                await ConfigService.SaveAsync();
             }
             catch (LinkButtonNotPressedException)
             {
-                throw new RegistrationFailedException("The Hue bridge button must be long pressed before you attempt registration.");
+                throw new RegistrationFailedException(
+                    "The Hue bridge button must be long pressed before you attempt registration.");
             }
             catch (Exception exception)
             {
@@ -56,73 +129,48 @@ namespace HomeApi.Web.Services.Lighting.Hue
             }
         }
 
-        public async Task<IEnumerable<Models.Light>> GetLightsAsync()
+        public async Task<IEnumerable<LightViewModel>> GetLightsAsync()
+        {
+            var lights = await FindAllLightsAsync();
+
+            return lights.Select(l => new LightViewModel(l));
+        }
+
+        public async Task SetLightStateAsync(SetLightStateRequest request)
         {
             var client = await GetClientAsync();
 
-            var hueLights = await client.GetLightsAsync();
-
-            return hueLights.Select(l => new Models.Light(l.Id, l.Name));
-        }
-
-        public async Task TurnOnAsync(string id)
-        {
-            var client = await GetClientAsync();
-
-            await client.SendCommandAsync(new LightCommand() { On = true, Brightness = 255, TransitionTime = Config.FadeTime }, new[] { id });
-        }
-
-        public async Task TurnOffAsync(string id)
-        {
-            var client = await GetClientAsync();
-
-            await client.SendCommandAsync(new LightCommand() { On = false, TransitionTime = Config.FadeTime }, new[] { id });
-        }
-
-        private async Task<LocalHueClient> GetClientAsync()
-        {
-            if (string.IsNullOrWhiteSpace(Config.HueAppKey))
+            var command = new LightCommand
             {
-                throw new Exception("Hue has not yet been initialised.");
-            }
-            
-            if (client == null)
-            {
-                var bridges = await GetBridgesAsync();
+                On = request.PowerState,
+                TransitionTime = request.TransitionTime ?? Config.TransitionTime,
+                Brightness = request.Brightness ?? 255
+            };
 
-                client = new LocalHueClient(bridges.First().IpAddress);
+            var results = await client.SendCommandAsync(command, request.LightIds);
 
-                client.Initialize(Config.HueAppKey);
-            }
-
-            return client;
+            var kek = 6;
         }
 
-        private async Task<LocatedBridge[]> GetBridgesAsync()
+        public async Task SetTransitionTimeAsync(TimeSpan transition)
         {
-            if (bridges == null)
-            {
-                var locator = new HttpBridgeLocator();
-                var locatedBridges = await locator.LocateBridgesAsync(TimeSpan.FromSeconds(5));
+            Config.TransitionTime = transition;
 
-                bridges = locatedBridges.ToArray();
-            }
-
-            if (!bridges.Any())
-            {
-                throw new Exception("No Hue bridges were detected on the local network.");
-            }
-
-            return bridges;
+            await ConfigService.SaveAsync();
         }
 
-        private async Task<HueLight> GetLightById(string id)
+        public async Task SetSearchTimeoutAsync(TimeSpan timeout)
         {
-            var client = await GetClientAsync();
+            Config.SearchTimeout = timeout;
 
-            var hueLights = await client.GetLightsAsync();
+            await ConfigService.SaveAsync();
+        }
 
-            return hueLights.FirstOrDefault(l => l.Id == id);
+        public async Task<IEnumerable<GroupViewModel>> GetGroupsAsync()
+        {
+            var groups = await FindAllGroupsAsync();
+
+            return groups.Select(g => new GroupViewModel(g));
         }
     }
 }

@@ -1,19 +1,25 @@
-﻿using HomeApi.Web.Services.Lighting.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using HomeApi.Web.Services.Lighting.Hue.Models;
+using HomeApi.Web.Services.Lighting.RequestModels;
 
 namespace HomeApi.Web.Services.Lighting
 {
     public interface ILightingService
     {
+        Task<IEnumerable<GroupViewModel>> GetGroupsAsync();
+
+        Task<IEnumerable<LightViewModel>> GetLightsAsync();
+
         Task RegisterAsync();
 
-        Task<IEnumerable<Light>> GetLightsAsync();
+        Task SetGroupStateAsync(SetGroupStateRequest request);
 
-        Task TurnOnAsync(string id);
+        Task SetLightStateAsync(SetLightStateRequest request);
 
-        Task TurnOffAsync(string id);
+        Task SetSearchTimeoutAsync(TimeSpan timeout);
+
+        Task SetTransitionTimeAsync(TimeSpan transition);
     }
 }

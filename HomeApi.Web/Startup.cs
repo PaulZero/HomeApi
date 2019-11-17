@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using HomeApi.Web.Services.Config;
+using HomeApi.Web.Services.GoogleCast;
 using HomeApi.Web.Services.Lighting;
 using HomeApi.Web.Services.Lighting.Hue;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,6 +33,7 @@ namespace HomeApi.Web
             services.AddSingleton<IConfigService>(s => new ConfigService(s.GetRequiredService<IWebHostEnvironment>(), s.GetRequiredService<ILogger<ConfigService>>()));
 
             services.AddSingleton<ILightingService>(s => new HueLightingService(s.GetService<IConfigService>()));
+            services.AddSingleton<GoogleCastService>(s => new GoogleCastService());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
