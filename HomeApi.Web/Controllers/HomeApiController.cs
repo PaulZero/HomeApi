@@ -65,11 +65,9 @@ namespace HomeApi.Web.Controllers
             if (Config.IsDevelopmentMode)
             {
                 LogResponse("Bad Request", error);
-
-                return base.BadRequest(error);
             }
 
-            return base.BadRequest(new { });
+            return base.BadRequest(error ?? new { error = "Null object passed to BadRequest :'(" });
         }
 
         private void LogResponse(string status, object value = null)
