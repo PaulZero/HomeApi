@@ -22,6 +22,7 @@ namespace HomeApi.Web
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls("http:0.0.0.0:5000");
                 });
     }
 }
