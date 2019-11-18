@@ -7,6 +7,7 @@ using HomeApi.Web.Services.Lighting.Config;
 using HomeApi.Web.Services.Lighting.Exceptions;
 using HomeApi.Web.Services.Lighting.Hue.Models;
 using HomeApi.Web.Services.Lighting.RequestModels;
+using Microsoft.Extensions.Logging;
 using Q42.HueApi;
 using Q42.HueApi.Models.Bridge;
 using Q42.HueApi.Models.Groups;
@@ -15,49 +16,66 @@ namespace HomeApi.Web.Services.Lighting.Hue
 {
     public class HueLightingService : ILightingService
     {
-        private LightingConfig Config => ConfigService.Config.Lighting;
-        private IConfigService ConfigService { get; }
+        private LightingConfig Config => _configService.Config.Lighting;
+
+        private readonly IConfigService _configService;
+
+        private readonly ILogger _logger;
 
         private LocatedBridge[] _bridges;
 
         private LocalHueClient _client;
 
-        public HueLightingService(IConfigService configService)
+        public HueLightingService(IConfigService configService, ILogger<HueLightingService> logger)
         {
-            ConfigService = configService;
-        }
-
-        public async Task SetGroupStateAsync(SetGroupStateRequest request)
-        {
-            var client = await GetClientAsync();
-            var groups = await FindAllGroupsAsync();
-
-            var lightIds = groups.Where(g => request.GroupIds.Contains(g.Id))
-                .SelectMany(g => g.Lights)
-                .Distinct();
-
-            var command = new LightCommand
-            {
-                On = request.PowerState,
-                Brightness = request.Brightness,
-                TransitionTime = request.TransitionTime ?? Config.TransitionTime
-            };
-
-            await client.SendCommandAsync(command, lightIds);
+            _configService = configService;
+            _logger = logger;
         }
 
         private async Task<IEnumerable<Group>> FindAllGroupsAsync()
         {
-            var client = await GetClientAsync();
+            try
+            {
+                var client = await GetClientAsync();
 
-            return await client.GetGroupsAsync();
+                return await client.GetGroupsAsync();
+            }
+            catch (Exception exception)
+            {
+                var message = $"Failed to load all groups from Hue Bridge: {exception.Message}";
+
+                _logger.LogError(exception, message);
+
+                throw new Exception(message, exception);
+            }
         }
 
         private async Task<IEnumerable<Light>> FindAllLightsAsync()
         {
-            var client = await GetClientAsync();
+            try
+            {
+                var client = await GetClientAsync();
 
-            return await client.GetLightsAsync();
+                return await client.GetLightsAsync();
+            }
+            catch (Exception exception)
+            {
+                var message = $"Failed to load all lights from Hue Bridge: {exception.Message}";
+
+                _logger.LogError(exception, message);
+
+                throw new Exception(message, exception);
+            }
+        }
+
+        private async Task<Group> FindGroupByIdAsync(string id)
+        {
+            var groups = await FindAllGroupsAsync();
+            var selectedGroup = groups.FirstOrDefault(g => g.Id == id);
+
+            if (selectedGroup == null) throw new UnknownGroupException(id);
+
+            return selectedGroup;
         }
 
         private async Task<LocatedBridge[]> GetBridgesAsync()
@@ -91,17 +109,23 @@ namespace HomeApi.Web.Services.Lighting.Hue
             return _client;
         }
 
-        private async Task<Group> FindGroupByIdAsync(string id)
+        public async Task SetGroupStateAsync(SetGroupStateRequest request)
         {
+            var client = await GetClientAsync();
             var groups = await FindAllGroupsAsync();
-            var selectedGroup = groups.FirstOrDefault(g => g.Id == id);
 
-            if (selectedGroup == null)
+            var lightIds = groups.Where(g => request.GroupIds.Contains(g.Id))
+                .SelectMany(g => g.Lights)
+                .Distinct();
+
+            var command = new LightCommand
             {
-                throw new UnknownGroupException(id);
-            }
+                On = request.PowerState,
+                Brightness = request.Brightness,
+                TransitionTime = request.TransitionTime ?? Config.TransitionTime
+            };
 
-            return selectedGroup;
+            await client.SendCommandAsync(command, lightIds);
         }
 
         public async Task RegisterAsync()
@@ -116,7 +140,7 @@ namespace HomeApi.Web.Services.Lighting.Hue
 
                 Config.HueAppKey = await client.RegisterAsync("HomeApi", "HomeApiServer");
 
-                await ConfigService.SaveAsync();
+                await _configService.SaveAsync();
             }
             catch (LinkButtonNotPressedException)
             {
@@ -156,14 +180,14 @@ namespace HomeApi.Web.Services.Lighting.Hue
         {
             Config.TransitionTime = transition;
 
-            await ConfigService.SaveAsync();
+            await _configService.SaveAsync();
         }
 
         public async Task SetSearchTimeoutAsync(TimeSpan timeout)
         {
             Config.SearchTimeout = timeout;
 
-            await ConfigService.SaveAsync();
+            await _configService.SaveAsync();
         }
 
         public async Task<IEnumerable<GroupViewModel>> GetGroupsAsync()
