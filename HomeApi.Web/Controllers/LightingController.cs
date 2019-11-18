@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using HomeApi.Web.Services.Config;
 using HomeApi.Web.Services.Lighting;
@@ -23,9 +24,18 @@ namespace HomeApi.Web.Controllers
         [Route("list-groups")]
         public async Task<IActionResult> ListGroups()
         {
+            Logger.LogInformation("Starting ListGroups action");
+
             try
             {
                 var groups = await lighting.GetGroupsAsync() ?? new GroupViewModel[0];
+
+                if (!groups.Any())
+                {
+                    Logger.LogError("No groups were returned from the Hub");
+
+                    return BadRequest("No groups found.");
+                }
 
                 return Ok(groups);
             }
