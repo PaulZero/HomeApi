@@ -8,6 +8,7 @@ using HomeApi.Web.Services.Lighting.Hue.Models;
 using HomeApi.Web.Services.Lighting.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace HomeApi.Web.Controllers
 {
@@ -37,7 +38,7 @@ namespace HomeApi.Web.Controllers
 
                 Logger.LogInformation("Attempting to send Ok...");
 
-                return Ok(groups);
+                return Json(groups);
             }
             catch (Exception exception)
             {
