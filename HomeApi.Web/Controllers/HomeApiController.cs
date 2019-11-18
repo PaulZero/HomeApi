@@ -69,7 +69,7 @@ namespace HomeApi.Web.Controllers
                 return base.BadRequest(error);
             }
 
-            return base.BadRequest(null);
+            return base.BadRequest(new { });
         }
 
         private void LogResponse(string status, object value = null)
