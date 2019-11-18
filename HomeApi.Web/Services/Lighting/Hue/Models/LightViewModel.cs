@@ -1,41 +1,23 @@
-﻿using Q42.HueApi;
-using System;
-using System.Text.Json.Serialization;
+﻿using HueLight = Q42.HueApi.Light;
+using BaseLight = HomeApi.Libraries.Models.Lighting.Light;
 
 namespace HomeApi.Web.Services.Lighting.Hue.Models
 {
-    public class LightViewModel
+    public class LightViewModel : BaseLight
     {
-        [JsonIgnore]
-        public TimeSpan MinTransitionTime { get; } = TimeSpan.FromMilliseconds(500);
-
-        public string Id => light.Id;
-
-        public string Name => light.Name;
-
-        public byte Brightness => light.State.Brightness;
-
-        public string ColourMode => light.State.ColorMode;
-
-        public int? ColourTemperature => light.State.ColorTemperature;
-
-        public double[] ColourCoordinates => light.State.ColorCoordinates;
-
-        public bool IsOn => light.State.On;
-
-        public bool? IsReachable => light.State.IsReachable;
-
-        public int? Hue => light.State.Hue;
-
-        public int? Saturation => light.State.Saturation;
-
-        public int? TransitionMilliseconds => light.State.TransitionTime?.Milliseconds;
-
-        private readonly Light light;
-
-        public LightViewModel(Light light)
+        public LightViewModel(HueLight light)
         {
-            this.light = light;
+            Id = light.Id;
+            Name = light.Name;
+            Brightness = light.State.Brightness;
+            ColourMode = light.State.ColorMode;
+            ColourTemperature = light.State.ColorTemperature;
+            ColourCoordinates = light.State.ColorCoordinates;
+            IsOn = light.State.On;
+            IsReachable = light.State.IsReachable;
+            Hue = light.State.Hue;
+            Saturation = light.State.Saturation;
+            TransitionMilliseconds = light.State.TransitionTime?.Milliseconds;
         }
     }
 }

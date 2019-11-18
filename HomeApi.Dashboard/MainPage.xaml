@@ -1,0 +1,15 @@
+﻿<Page
+    x:Class="HomeApi.Dashboard.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HomeApi.Dashboard"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="#acd"
+    Loaded="MainPage_OnLoaded"
+    DataContext="HomeApi.Dashboard.MainPage">
+    <StackPanel>
+        <Button Click="Toggle_Light" Content="{Binding Path=Kek}"></Button>
+    </StackPanel>
+</Page>

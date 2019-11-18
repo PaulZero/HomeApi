@@ -19,7 +19,7 @@ namespace HomeApi.Web.Controllers
             lighting = lightingService;
         }
 
-        [HttpGet("list-groups")]
+        [Route("list-groups")]
         public async Task<IActionResult> ListGroups()
         {
             try
@@ -34,7 +34,7 @@ namespace HomeApi.Web.Controllers
             }
         }
 
-        [HttpGet("list-lights")]
+        [Route("list-lights")]
         public async Task<IActionResult> ListLights()
         {
             try

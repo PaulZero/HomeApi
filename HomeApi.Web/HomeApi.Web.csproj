@@ -22,4 +22,8 @@
     <Folder Include="config\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\HomeApi.Libraries\HomeApi.Libraries.csproj" />
+  </ItemGroup>
+
 </Project>
