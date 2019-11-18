@@ -32,7 +32,7 @@ namespace HomeApi.Web
 
             services.AddSingleton<IConfigService>(s => new ConfigService(s.GetRequiredService<IWebHostEnvironment>(), s.GetRequiredService<ILogger<ConfigService>>()));
 
-            services.AddSingleton<ILightingService>(s => new HueLightingService(s.GetService<IConfigService>()));
+            services.AddSingleton<ILightingService>(s => new HueLightingService(s.GetService<IConfigService>(), s.GetService<ILogger<HueLightingService>>()));
             services.AddSingleton<GoogleCastService>(s => new GoogleCastService());
         }
 

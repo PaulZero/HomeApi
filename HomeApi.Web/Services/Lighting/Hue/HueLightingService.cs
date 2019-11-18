@@ -132,13 +132,24 @@ namespace HomeApi.Web.Services.Lighting.Hue
         {
             if (Config.HueAppKey != null) throw new Exception("HueBridge is already registered.");
 
+            string machineName;
+
+            try
+            {
+                machineName = Environment.MachineName;
+            }
+            catch
+            {
+                machineName = $"Machine-{Guid.NewGuid()}";
+            }
+
             try
             {
                 var bridges = await GetBridgesAsync();
 
                 var client = new LocalHueClient(bridges.First().IpAddress);
 
-                Config.HueAppKey = await client.RegisterAsync("HomeApi", "HomeApiServer");
+                Config.HueAppKey = await client.RegisterAsync("HomeApi", machineName);
 
                 await _configService.SaveAsync();
             }
@@ -171,9 +182,8 @@ namespace HomeApi.Web.Services.Lighting.Hue
                 Brightness = request.Brightness ?? 255
             };
 
-            var results = await client.SendCommandAsync(command, request.LightIds);
-
-            var kek = 6;
+            // TODO: Investigate the results to see what decent info could be returned e.g. errors
+            await client.SendCommandAsync(command, request.LightIds);
         }
 
         public async Task SetTransitionTimeAsync(TimeSpan transition)

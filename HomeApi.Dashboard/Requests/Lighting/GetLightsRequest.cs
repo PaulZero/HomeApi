@@ -12,7 +12,7 @@ namespace HomeApi.Dashboard.Requests.Lighting
             {
                 return await PostAsync("/api/lights/list-lights");
             }
-            catch (Exception exception)
+            catch// (Exception exception)
             {
                 return null;
             }
