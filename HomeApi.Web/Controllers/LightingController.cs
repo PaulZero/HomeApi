@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HomeApi.Web.Services.Config;
@@ -28,24 +29,25 @@ namespace HomeApi.Web.Controllers
 
             try
             {
+                Logger.LogInformation("Fetching groups...");
+
                 var groups = await lighting.GetGroupsAsync() ?? new GroupViewModel[0];
 
-                if (!groups.Any())
-                {
-                    Logger.LogError("No groups were returned from the Hub");
+                Logger.LogInformation($"Retrieved {groups.Count()} group(s)");
 
-                    return BadRequest("No groups found.");
-                }
+                Logger.LogInformation("Attempting to send Ok...");
 
                 return Ok(groups);
             }
             catch (Exception exception)
             {
+                Logger.LogError($"An error occurred: {exception.Message}");
+
                 return BadRequest(exception);
             }
         }
 
-        [Route("connection-status")]
+        [HttpGet("connection-status")]
         public async Task<IActionResult> ConnectionStatus()
         {
             try
@@ -60,7 +62,7 @@ namespace HomeApi.Web.Controllers
             }
         }
 
-        [Route("list-lights")]
+        [HttpGet("list-lights")]
         public async Task<IActionResult> ListLights()
         {
             try
