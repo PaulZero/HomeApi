@@ -21,7 +21,7 @@ namespace HomeApi.Web.Controllers
             lighting = lightingService;
         }
 
-        [Route("list-groups")]
+        [HttpGet("list-groups")]
         public async Task<IActionResult> ListGroups()
         {
             Logger.LogInformation("Starting ListGroups action");

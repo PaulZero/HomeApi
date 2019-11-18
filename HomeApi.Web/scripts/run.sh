@@ -7,5 +7,6 @@ cd ..
 git pull
 
 # Build and run the application
+dotnet clean
 dotnet build
 dotnet run
