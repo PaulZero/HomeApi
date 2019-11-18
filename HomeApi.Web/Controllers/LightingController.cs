@@ -26,25 +26,15 @@ namespace HomeApi.Web.Controllers
         [HttpGet("list-groups")]
         public async Task<IActionResult> ListGroups()
         {
-            Logger.LogInformation("Starting ListGroups action");
-
             try
             {
-                Logger.LogInformation("Fetching groups...");
-
                 var groups = await lighting.GetGroupsAsync() ?? new GroupViewModel[0];
 
-                Logger.LogInformation($"Retrieved {groups.Count()} group(s)");
-
-                Logger.LogInformation("Attempting to send Ok...");
-
-                return Json(groups);
+                return StandardResponse(true, groups);
             }
             catch (Exception exception)
             {
-                Logger.LogError($"An error occurred: {exception.Message}");
-
-                return BadRequest(exception);
+                return ErrorResponse(exception);
             }
         }
 
@@ -55,11 +45,11 @@ namespace HomeApi.Web.Controllers
             {
                 var isConnected = await lighting.GetConnectionStatusAsync();
 
-                return Ok(new {isConnected});
+                return StandardResponse(true, new {isConnected});
             }
             catch (Exception exception)
             {
-                return BadRequest(exception);
+                return ErrorResponse(exception);
             }
         }
 
@@ -70,11 +60,11 @@ namespace HomeApi.Web.Controllers
             {
                 var lights = await lighting.GetLightsAsync() ?? new LightViewModel[0];
 
-                return Ok(lights);
+                return StandardResponse(lights);
             }
             catch (Exception exception)
             {
-                return BadRequest(exception);
+                return ErrorResponse(exception);
             }
         }
 
@@ -85,11 +75,11 @@ namespace HomeApi.Web.Controllers
             {
                 await lighting.RegisterAsync();
 
-                return Ok("Hue has been successfully registered.");
+                return StandardResponse("Hue has been successfully registered.");
             }
             catch (Exception exception)
             {
-                return BadRequest(exception);
+                return ErrorResponse(exception);
             }
         }
 
@@ -100,11 +90,11 @@ namespace HomeApi.Web.Controllers
             {
                 await lighting.SetGroupStateAsync(request);
 
-                return Ok();
+                return StandardResponse();
             }
             catch (Exception exception)
             {
-                return BadRequest(exception);
+                return ErrorResponse(exception);
             }
         }
 
@@ -115,11 +105,11 @@ namespace HomeApi.Web.Controllers
             {
                 await lighting.SetLightStateAsync(request);
 
-                return Ok();
+                return StandardResponse();
             }
             catch (Exception exception)
             {
-                return BadRequest(exception);
+                return ErrorResponse(exception);
             }
         }
     }

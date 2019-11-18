@@ -1,22 +1,49 @@
-﻿using HomeApi.Web.Services.Config;
+﻿using System;
+using System.Collections.Generic;
+using HomeApi.Libraries.Models.Responses;
+using HomeApi.Web.Libraries.ActionFilters;
+using HomeApi.Web.Services.Config;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 
 namespace HomeApi.Web.Controllers
 {
+    [LogRouteFilter]
     public abstract class HomeApiController : Controller
     {
         protected IConfigService Config { get; }
 
         protected ILogger Logger { get; }
 
-        public HomeApiController(IConfigService config, ILogger logger)
+        protected HomeApiController(IConfigService config, ILogger logger)
         {
             Config = config;
-            Logger = logger;            
+            Logger = logger;
+        }
+
+        public override BadRequestResult BadRequest()
+        {
+            if (Config.IsDevelopmentMode)
+            {
+                LogResponse("Bad Request");
+
+                return base.BadRequest();
+            }
+
+            return base.BadRequest();
+        }
+
+        public BadRequestObjectResult BadRequest(Exception exception)
+        {
+            return BadRequest($"{exception.GetType().Name} - {exception.Message}");
+        }
+
+        public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object error)
+        {
+            if (Config.IsDevelopmentMode) LogResponse("Bad Request", error);
+
+            return base.BadRequest(error ?? new {error = "Null object passed to BadRequest :'("});
         }
 
         public override OkResult Ok()
@@ -43,31 +70,38 @@ namespace HomeApi.Web.Controllers
             return base.Ok(null);
         }
 
-        public override BadRequestResult BadRequest()
+        public JsonResult ErrorResponse(Exception exception)
         {
-            if (Config.IsDevelopmentMode)
-            {
-                LogResponse("Bad Request");
+            var response = StandardResponse(false, exception.Message);
 
-                return base.BadRequest();
-            }
+            response.StatusCode = 400;
 
-            return base.BadRequest();
+            return response;
         }
 
-        public BadRequestObjectResult BadRequest(Exception exception)
+        public JsonResult StandardResponse(string message)
         {
-            return BadRequest($"{exception.GetType().Name} - {exception.Message}");
+            return StandardResponse(true, null, message);
         }
 
-        public override BadRequestObjectResult BadRequest([ActionResultObjectValue] object error)
+        public JsonResult StandardResponse(object data = null, string message = null)
         {
-            if (Config.IsDevelopmentMode)
-            {
-                LogResponse("Bad Request", error);
-            }
+            return StandardResponse(true, data, message);
+        }
 
-            return base.BadRequest(error ?? new { error = "Null object passed to BadRequest :'(" });
+        public JsonResult StandardResponse(bool success, string message)
+        {
+            return StandardResponse(success, null, message);
+        }
+
+        public JsonResult StandardResponse(bool success, object data = null, string message = null)
+        {
+            return Json(new StandardResponse
+            {
+                Data = data,
+                Message = message,
+                Success = success
+            });
         }
 
         private void LogResponse(string status, object value = null)
