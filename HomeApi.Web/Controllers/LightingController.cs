@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using HomeApi.Web.Services.Config;
 using HomeApi.Web.Services.Lighting;
+using HomeApi.Web.Services.Lighting.Hue.Models;
 using HomeApi.Web.Services.Lighting.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,9 +25,24 @@ namespace HomeApi.Web.Controllers
         {
             try
             {
-                var groups = await lighting.GetGroupsAsync();
+                var groups = await lighting.GetGroupsAsync() ?? new GroupViewModel[0];
 
                 return Ok(groups);
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception);
+            }
+        }
+
+        [Route("connection-status")]
+        public async Task<IActionResult> ConnectionStatus()
+        {
+            try
+            {
+                var isConnected = await lighting.GetConnectionStatusAsync();
+
+                return Ok(new {isConnected});
             }
             catch (Exception exception)
             {
@@ -39,7 +55,7 @@ namespace HomeApi.Web.Controllers
         {
             try
             {
-                var lights = await lighting.GetLightsAsync();
+                var lights = await lighting.GetLightsAsync() ?? new LightViewModel[0];
 
                 return Ok(lights);
             }
@@ -56,7 +72,7 @@ namespace HomeApi.Web.Controllers
             {
                 await lighting.RegisterAsync();
 
-                return Ok();
+                return Ok("Hue has been successfully registered.");
             }
             catch (Exception exception)
             {

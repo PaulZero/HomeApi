@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HomeApi.Web.Services.Lighting.Hue.Models;
 using HomeApi.Web.Services.Lighting.RequestModels;
+using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
 namespace HomeApi.Web.Services.Lighting
 {
@@ -13,6 +14,8 @@ namespace HomeApi.Web.Services.Lighting
         Task<IEnumerable<LightViewModel>> GetLightsAsync();
 
         Task RegisterAsync();
+
+        Task<bool> GetConnectionStatusAsync();
 
         Task SetGroupStateAsync(SetGroupStateRequest request);
 

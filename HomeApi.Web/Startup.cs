@@ -28,7 +28,12 @@ namespace HomeApi.Web
         {
             services.AddMvc();
 
-            services.AddLogging();
+            services.AddLogging(logStuff =>
+            {
+                logStuff.AddConsole();
+
+                logStuff.SetMinimumLevel(LogLevel.Debug);
+            });
 
             services.AddSingleton<IConfigService>(s => new ConfigService(s.GetRequiredService<IWebHostEnvironment>(), s.GetRequiredService<ILogger<ConfigService>>()));
 

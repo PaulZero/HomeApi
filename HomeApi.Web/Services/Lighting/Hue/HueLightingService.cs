@@ -109,6 +109,13 @@ namespace HomeApi.Web.Services.Lighting.Hue
             return _client;
         }
 
+        public async Task<bool> GetConnectionStatusAsync()
+        {
+            var client = await GetClientAsync();
+
+            return await client.CheckConnection();
+        }
+
         public async Task SetGroupStateAsync(SetGroupStateRequest request)
         {
             var client = await GetClientAsync();
