@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HomeApi.Web.Services.Lighting.RequestModels
+namespace HomeApi.Libraries.Models.Requests
 {
     public abstract class AbstractStateRequest
     {

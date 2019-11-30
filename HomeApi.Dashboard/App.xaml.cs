@@ -52,7 +52,7 @@ namespace HomeApi.Dashboard
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            (ServiceProvider as ServiceProvider)?.Initialise();
+            ServiceProvider.Initialise();
 
             Frame rootFrame = Window.Current.Content as Frame;
 

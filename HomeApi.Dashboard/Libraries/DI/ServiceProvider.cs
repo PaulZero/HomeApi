@@ -36,11 +36,11 @@ namespace HomeApi.Dashboard.Libraries.DI
             return (TService) GetService(typeof(TService));
         }
 
-        public void Initialise()
+        public async void Initialise()
         {
             foreach (var service in Services.Values)
             {
-                service.InitialiseAsync().Wait();
+                await service.InitialiseAsync();
             }
         }
     }

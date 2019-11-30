@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HomeApi.Libraries.Models.Requests;
 using HomeApi.Web.Services.Config;
 using HomeApi.Web.Services.Lighting.Config;
 using HomeApi.Web.Services.Lighting.Exceptions;
 using HomeApi.Web.Services.Lighting.Hue.Models;
-using HomeApi.Web.Services.Lighting.RequestModels;
 using Microsoft.Extensions.Logging;
 using Q42.HueApi;
 using Q42.HueApi.Models.Bridge;

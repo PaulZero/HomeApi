@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HomeApi.Libraries.Models.Requests;
 using HomeApi.Web.Services.Lighting.Hue.Models;
-using HomeApi.Web.Services.Lighting.RequestModels;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
 namespace HomeApi.Web.Services.Lighting

@@ -1,0 +1,30 @@
+﻿<UserControl
+    x:Class="HomeApi.Dashboard.Views.Components.Lighting.LightingRowItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HomeApi.Dashboard.Views.Components.Lighting"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:system="using:System"
+    Height="Auto"
+    mc:Ignorable="d"
+    d:DesignWidth="400" d:DesignHeight="41.897"
+    Loaded="LightingRowItem_OnLoaded">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center" Padding="16" Margin="4" />
+
+        <local:BrightnessRange Grid.Column="1" Light="{Binding}" />
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal">
+            <ToggleButton Padding="16" Margin="4" IsEnabled="{Binding IsReachable}" IsChecked="{Binding IsOn, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">On</ToggleButton>
+            <Button Padding="16" Margin="4" Click="MoreButton_OnClick" IsEnabled="{Binding IsReachable, UpdateSourceTrigger=PropertyChanged}">More</Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

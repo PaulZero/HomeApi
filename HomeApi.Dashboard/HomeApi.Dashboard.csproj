@@ -127,13 +127,32 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Requests\AbstractRequest.cs" />
-    <Compile Include="Requests\Lighting\GetLightsRequest.cs" />
+    <Compile Include="Requests\Lighting\GetLights.cs" />
+    <Compile Include="Requests\Lighting\SetLightState.cs" />
     <Compile Include="Services\Lighting\LightingService.cs" />
     <Compile Include="Views\AbstractViewModel.cs" />
     <Compile Include="Views\Command.cs" />
+    <Compile Include="Views\Components\Lighting\BrightnessRange.xaml.cs">
+      <DependentUpon>BrightnessRange.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Components\Lighting\LightingRowItem.xaml.cs">
+      <DependentUpon>LightingRowItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Components\Themes.cs" />
+    <Compile Include="Views\Dialogs\Lighting\LightingInfoDialog.xaml.cs">
+      <DependentUpon>LightingInfoDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Models\DashboardViewModel.cs" />
+    <Compile Include="Views\Models\LightingPageViewModel.cs" />
+    <Compile Include="Views\Models\LightViewModel.cs" />
+    <Compile Include="Views\Pages\AudioPage.xaml.cs">
+      <DependentUpon>AudioPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Pages\DashboardPage.xaml.cs">
       <DependentUpon>DashboardPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\LightingPage.xaml.cs">
+      <DependentUpon>LightingPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -160,7 +179,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Components\Lighting\BrightnessRange.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Components\Lighting\LightingRowItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\Lighting\LightingInfoDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\AudioPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Pages\DashboardPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\LandingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\LightingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

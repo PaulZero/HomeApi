@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HomeApi.Libraries.Models.Requests;
 using HomeApi.Web.Services.Config;
 using HomeApi.Web.Services.Lighting;
 using HomeApi.Web.Services.Lighting.Hue.Models;
-using HomeApi.Web.Services.Lighting.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;

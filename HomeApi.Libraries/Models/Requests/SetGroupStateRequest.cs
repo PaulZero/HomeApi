@@ -1,4 +1,4 @@
-﻿namespace HomeApi.Web.Services.Lighting.RequestModels
+﻿namespace HomeApi.Libraries.Models.Requests
 {
     public class SetGroupStateRequest : AbstractStateRequest
     {
