@@ -130,6 +130,7 @@
     <Compile Include="Requests\Lighting\GetLights.cs" />
     <Compile Include="Requests\Lighting\SetLightState.cs" />
     <Compile Include="Services\Lighting\LightingService.cs" />
+    <Compile Include="Services\UserInteraction\IdleService.cs" />
     <Compile Include="Views\AbstractViewModel.cs" />
     <Compile Include="Views\Command.cs" />
     <Compile Include="Views\Components\Lighting\BrightnessRange.xaml.cs">

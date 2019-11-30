@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Store.Preview;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -17,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using HomeApi.Dashboard.Libraries.DI;
 using HomeApi.Dashboard.Services.Lighting;
+using HomeApi.Dashboard.Services.UserInteraction;
 using HomeApi.Dashboard.Views.Pages;
 
 namespace HomeApi.Dashboard
@@ -43,6 +45,7 @@ namespace HomeApi.Dashboard
         private void ConfigureServiceProvider()
         {
             ServiceProvider.AddService(new LightingService());
+            ServiceProvider.AddService(new IdleService());
         }
 
         /// <summary>
