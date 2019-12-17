@@ -6,6 +6,7 @@ using HomeApi.Web.Services.Lighting;
 using HomeApi.Web.Services.Lighting.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Drawing;
 
 namespace HomeApi.Web.Controllers
 {
@@ -76,6 +77,39 @@ namespace HomeApi.Web.Controllers
             {
                 return BadRequest(exception);
             }
+        }
+
+        [Route("/api/lights/{id}/colour/{hex}")]
+        public async Task<IActionResult> ChangeLightColour(string id, string hex)
+        {
+            try
+            {
+                Color colour = HexToColor(hex);
+                await lighting.ChangeLightColour(id, colour);
+
+                return Ok();
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(exception);
+            }
+        }
+
+        /// <summary>
+        /// Convert a six-letter hexadecimal string to a Color
+        /// </summary>
+        /// 
+        /// Does not strip any prefixes
+        ///
+        /// <param name="hex">The hex string</param>
+        /// <returns>The Color object represented by the string</returns>
+        private static Color HexToColor(string hex)
+        {
+            int r = Convert.ToInt32(hex.Substring(0, 2), 16);
+            int g = Convert.ToInt32(hex.Substring(2, 2), 16);
+            int b = Convert.ToInt32(hex.Substring(4, 2), 16);
+
+            return Color.FromArgb(r, g, b);
         }
     }
 }

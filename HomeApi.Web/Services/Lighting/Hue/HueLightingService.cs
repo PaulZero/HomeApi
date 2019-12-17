@@ -7,6 +7,7 @@ using Q42.HueApi.Models;
 using Q42.HueApi.Models.Bridge;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -77,6 +78,24 @@ namespace HomeApi.Web.Services.Lighting.Hue
             var client = await GetClientAsync();
 
             await client.SendCommandAsync(new LightCommand() { On = false, TransitionTime = Config.FadeTime }, new[] { id });
+        }
+
+        public async Task ChangeLightColour(string id, Color colour)
+        {
+            var client = await GetClientAsync();
+
+            await ChangeColour(client, id, colour);
+        }
+
+        private async Task ChangeColour(LocalHueClient client, string id, Color colour)
+        {
+            await client.SendCommandAsync(new LightCommand()
+            {
+                Hue = (int)(colour.GetHue() / 360 * 65535),
+                Brightness = (byte)(colour.GetBrightness() * 254),
+                Saturation = (int)(colour.GetSaturation() * 254),
+                TransitionTime = Config.FadeTime
+            }, new[] { id });
         }
 
         private async Task<LocalHueClient> GetClientAsync()
