@@ -13,7 +13,6 @@ using Newtonsoft.Json;
 
 namespace HomeApi.Web.Controllers
 {
-    [DisableCors]
     [Route("/api/lights")]
     public class LightingController : HomeApiController
     {

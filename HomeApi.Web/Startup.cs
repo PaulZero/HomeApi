@@ -1,3 +1,4 @@
+using HomeApi.Web.Libraries.Middleware;
 using HomeApi.Web.Services.Config;
 using HomeApi.Web.Services.GoogleCast;
 using HomeApi.Web.Services.Lighting;
@@ -48,6 +49,8 @@ namespace HomeApi.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.AnnihilateCors();
 
             app.UseRouting();
 
