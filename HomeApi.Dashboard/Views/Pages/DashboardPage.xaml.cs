@@ -60,7 +60,7 @@ namespace HomeApi.Dashboard.Views.Pages
             NavigationView.SelectedItem = NavigationView.MenuItems
                 .OfType<NavigationViewItem>()
                 .First(n => n.Tag.Equals(item.Tag));
-            
+
             NavigationView.Header =
                 ((NavigationViewItem)NavigationView.SelectedItem)?.Content?.ToString();
         }

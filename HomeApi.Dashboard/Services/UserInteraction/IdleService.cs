@@ -32,7 +32,7 @@ namespace HomeApi.Dashboard.Services.UserInteraction
 
         public IdleService()
         {
-            _timer = new DispatcherTimer {Interval = _timeoutDuration};
+            _timer = new DispatcherTimer { Interval = _timeoutDuration };
 
             _timer.Tick += Timer_Tick;
         }

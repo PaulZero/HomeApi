@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace HomeApi.Web.Libraries.ActionFilters
 {
-    [AttributeUsage(AttributeTargets.Class|AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class LogRouteFilterAttribute : ActionFilterAttribute
     {
         private DateTime _startTime;

@@ -16,7 +16,7 @@ namespace HomeApi.Dashboard.Views.Components.Lighting
 
         public LightViewModel LightViewModel
         {
-            get => (LightViewModel) GetValue(LightViewModelProperty);
+            get => (LightViewModel)GetValue(LightViewModelProperty);
             set => SetValue(LightViewModelProperty, value);
         }
 

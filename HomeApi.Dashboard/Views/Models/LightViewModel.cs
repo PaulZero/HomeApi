@@ -56,7 +56,7 @@ namespace HomeApi.Dashboard.Views.Models
 
         private async void UpdateLight()
         {
-//            CanUpdateLight = false;
+            //            CanUpdateLight = false;
 
             try
             {
@@ -66,7 +66,7 @@ namespace HomeApi.Dashboard.Views.Models
                 {
                     PowerState = IsOn,
                     Brightness = Brightness,
-                    LightIds = new[] {Id}
+                    LightIds = new[] { Id }
                 });
             }
             catch

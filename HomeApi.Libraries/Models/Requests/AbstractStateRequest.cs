@@ -16,7 +16,7 @@ namespace HomeApi.Libraries.Models.Requests
             {
                 if (TransitionMilliseconds == null) return null;
 
-                return TimeSpan.FromMilliseconds((int) TransitionMilliseconds);
+                return TimeSpan.FromMilliseconds((int)TransitionMilliseconds);
             }
         }
     }
