@@ -6,12 +6,14 @@ using HomeApi.Libraries.Models.Requests;
 using HomeApi.Web.Services.Config;
 using HomeApi.Web.Services.Lighting;
 using HomeApi.Web.Services.Lighting.Hue.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace HomeApi.Web.Controllers
 {
+    [DisableCors]
     [Route("/api/lights")]
     public class LightingController : HomeApiController
     {

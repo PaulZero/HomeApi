@@ -27,7 +27,7 @@ namespace HomeApi.Dashboard.Services.UserInteraction
         }
 
         private bool _isIdle;
-        private readonly TimeSpan _timeoutDuration = TimeSpan.FromSeconds(10);
+        private readonly TimeSpan _timeoutDuration = TimeSpan.FromSeconds(30);
         private readonly DispatcherTimer _timer;
 
         public IdleService()

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using HomeApi.Libraries.Models.Lighting;
 using Newtonsoft.Json;
@@ -15,7 +17,15 @@ namespace HomeApi.Dashboard.Requests.Lighting
 
                 if (standardResponse.Success)
                 {
-                    var lights = JsonConvert.DeserializeObject<Light[]>(standardResponse.Data.ToString());
+                    var json = standardResponse.Data.ToString();
+
+                    var lights = JsonConvert.DeserializeObject<Light[]>(standardResponse.Data.ToString())
+                        .OrderBy(l => l.Name).ToArray();
+
+                    foreach (var light in lights)
+                    {
+                        Debug.WriteLine($"Fetched light: {light.Name} | Brightness: {light.Brightness} ({light.BrightnessPercentage}%");
+                    }
 
                     return lights;
                 }

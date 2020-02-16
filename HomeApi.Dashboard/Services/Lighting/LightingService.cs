@@ -1,6 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 using HomeApi.Dashboard.Libraries.DI;
 using HomeApi.Dashboard.Requests.Lighting;
 using HomeApi.Dashboard.Views.Models;
@@ -14,13 +17,31 @@ namespace HomeApi.Dashboard.Services.Lighting
 
         private readonly ObservableCollection<LightViewModel> _internalLights = new ObservableCollection<LightViewModel>();
 
+        private readonly DispatcherTimer _refreshTimer;
+
         public LightingService()
         {
             Lights = new ReadOnlyObservableCollection<LightViewModel>(_internalLights);
+
+            _refreshTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(10)
+            };
+
+            _refreshTimer.Tick += RefreshTimer_Tick;
         }
 
         public async Task InitialiseAsync()
         {
+            await RefreshLights();
+
+            _refreshTimer.Start();
+        }
+
+        private async void RefreshTimer_Tick(object sender, object e)
+        {
+            Debug.WriteLine("Refreshing lights...");
+
             await RefreshLights();
         }
 
