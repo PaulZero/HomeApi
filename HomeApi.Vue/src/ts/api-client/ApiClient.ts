@@ -1,29 +1,60 @@
 ﻿import axios from "axios";
+//import { Light } from "@/ts/models/lights/Light";
 
 export class ApiClient {
     private readonly _server = "http://pi-server";
 
-    public async listLights(): Promise<Light[]> | null {
-        return await this.get("/api/lights/list-lights");
+    public async listLights(): Promise<any | null> {
+        const response = await this.get("/api/lights/list-lights");
+
+        if (response && response.hasOwnProperty("data")) {
+            return response.data;
+        }
+
+        return null;
+    }
+
+    public async setLightState(id: string, brightness: number, isOn: boolean): Promise<void> {
+        const params = {
+            LightIds: [id],
+            Brightness: brightness,
+            PowerState: isOn
+        };
+
+        await this.post("/api/lights/set-light-state", params);
+    }
+
+    private async post(relativeUrl: string, data: any = null): Promise<any> {
+        const url = this.prepareUrl(relativeUrl);
+
+        try {
+            const response = await axios.post(url, data);
+
+            return response.data;
+        } catch (error) {
+            console.log(`Could not make POST request to ${url} - ${error}`);
+        }
     }
 
     private async get(relativeUrl: string): Promise<any> {
+        const url = this.prepareUrl(relativeUrl);
+
         try {
-            if (!relativeUrl.startsWith('/')) {
-                relativeUrl = `/${relativeUrl}`;
-            }
-
-            const url = `${this._server}${relativeUrl}`;
-
             const response = await axios.get(url);
 
             console.log("A POST request was made!", response);
 
-            return JSON.parse(response.data);
+            return response.data;
         } catch (error) {
-            console.error("An error occurred!", error);
-
-            return null;
+            console.log(`Could not make GET request to ${url} - ${error}`);
         }
+    }
+
+    private prepareUrl(relativeUrl: string): string {
+        if (!relativeUrl.startsWith("/")) {
+            relativeUrl = `/${relativeUrl}`;
+        }
+
+        return `${this._server}${relativeUrl}`;
     }
 }
