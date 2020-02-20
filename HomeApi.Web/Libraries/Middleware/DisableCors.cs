@@ -20,6 +20,8 @@ namespace HomeApi.Web.Libraries.Middleware
         public Task Invoke(HttpContext httpContext)
         {
             httpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            httpContext.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+            httpContext.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
 
             return _next(httpContext);
         }
