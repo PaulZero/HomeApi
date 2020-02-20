@@ -1,4 +1,6 @@
-﻿class Light {
+﻿import { ApiClient } from "@/ts/api-client/ApiClient";
+
+export class Light {
     get brightnessPercentage(): number { return this._brightnessPercentage; }
 
     get colourCoordinates(): number[] { return this._colourCoordinates; }
@@ -21,17 +23,17 @@
 
     get transitionMilliseconds(): number | null { return this._transitionMilliseconds; }
 
-    private readonly _brightnessPercentage: number;
-    private readonly _colourCoordinates: number[];
-    private readonly _colourMode: string;
-    private readonly _colourTemperature: number | null;
-    private readonly _hue: number | null;
+    private _brightnessPercentage: number;
+    private _colourCoordinates: number[];
+    private _colourMode: string;
+    private _colourTemperature: number | null;
+    private _hue: number | null;
     private readonly _id: string;
-    private readonly _isOn: boolean;
-    private readonly _isReachable: boolean | null;
-    private readonly _name: string;
-    private readonly _saturation: number | null;
-    private readonly _transitionMilliseconds: number | null;
+    private _isOn: boolean;
+    private _isReachable: boolean | null;
+    private _name: string;
+    private _saturation: number | null;
+    private _transitionMilliseconds: number | null;
 
     constructor(
         brightnessPercentage: number,
@@ -57,5 +59,11 @@
         this._name = name;
         this._saturation = saturation;
         this._transitionMilliseconds = transitionMilliseconds;
+    }
+
+    public async togglePower(client: ApiClient): Promise<void> {
+        await client.setLightState(this.id, this.brightnessPercentage, !this.isOn);
+
+        this._isOn = !this._isOn;
     }
 }
