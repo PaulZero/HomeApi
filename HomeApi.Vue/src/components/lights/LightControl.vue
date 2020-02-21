@@ -34,11 +34,13 @@ import { LightService } from '../../ts/light-service/LightService';
 <style scoped>
     .light-control {
         font-family: sans-serif;
+        display: flex;       
     }
 
     .light-name {
-        min-width: 150px;
         display: inline-block;
+        flex-grow: 1;
+        font-size: 1.2em;
     }
 
     button {
@@ -50,6 +52,12 @@ import { LightService } from '../../ts/light-service/LightService';
         margin: 4px;
         cursor: pointer;
         font-weight: bold;
+        font-size: 1.2em;
+        min-width: 100px;
+    }
+
+    button:focus {
+        outline: none;
     }
 
     button.enabled {

@@ -8,14 +8,14 @@ export class ApiClient {
         this._server = process.env.VUE_APP_HOME_API_URL;
     }
 
-    public async listLights(): Promise<ILight[] | null> {
+    public async listLights(): Promise<ILight[]> {
         const response = await this.get("/api/lights/list-lights");
 
         if (response && response.hasOwnProperty("data")) {
             return response.data;
         }
 
-        return null;
+        return [];
     }
 
     public async setLightState(id: string, brightness: number, isOn: boolean): Promise<void> {
@@ -23,7 +23,7 @@ export class ApiClient {
             LightIds: [id],
             Brightness: 255,
             PowerState: isOn,
-            TransitionMilliseconds: 1000
+            TransitionMilliseconds: 100
         };
 
         await this.post("/api/lights/set-light-state", params);

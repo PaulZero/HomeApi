@@ -2,21 +2,24 @@
   "name": "home-api.vue",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
-  },
   "description": "HomeApi.Vue",
   "author": {
     "name": ""
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
     "axios": "^0.19.2",
     "vue": "^2.5.17",
     "vue-class-component": "^6.3.2",
-    "vue-property-decorator": "^7.3.0"
+    "vue-property-decorator": "^7.3.0",
+    "vuex": "^3.0.1",
+    "vuex-class": "^0.3.2"
   },
   "devDependencies": {
+    "@vue/cli": "4.2.2",
     "@vue/cli-plugin-babel": "3.0.4",
     "@vue/cli-plugin-typescript": "3.0.4",
     "@vue/cli-service": "3.0.4",
