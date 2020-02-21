@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
@@ -19,11 +16,12 @@ namespace HomeApi.Web.Libraries.Middleware
 
         public Task Invoke(HttpContext httpContext)
         {
-            httpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            httpContext.Response.Headers.Add("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
-            httpContext.Response.Headers.Add("Access-Control-Allow-Headers", "Origin, Content-Type, X-Auth-Token");
+            if (httpContext.Request.Method != HttpMethods.Options)
+                return _next(httpContext);
 
-            return _next(httpContext);
+            httpContext.Response.StatusCode = 200;
+
+            return Task.CompletedTask;
         }
     }
 
