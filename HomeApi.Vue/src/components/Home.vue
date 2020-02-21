@@ -1,7 +1,5 @@
 <template>
     <div class="home">
-        <p>Welcome to your new single-page application LOLOLOL, built with <a href="https://vuejs.org" target="_blank">Vue.js</a> and <a href="http://www.typescriptlang.org/" target="_blank">TypeScript</a>.</p>
-
         <div v-for="light in lights">
             <light-control :light="light"></light-control>
         </div>

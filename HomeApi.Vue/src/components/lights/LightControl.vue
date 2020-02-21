@@ -42,17 +42,17 @@ import { LightService } from '../../ts/light-service/LightService';
     }
 
     button {
-        background-color: indianred;
+        background-color: pink;
         color: black;
         border: none;
         border-radius: 2px;
         padding: 8px 16px;
         margin: 4px;
         cursor: pointer;
+        font-weight: bold;
     }
 
     button.enabled {
-        color: white;
-        background-color: green;
+        background-color: greenyellow;
     }
 </style>

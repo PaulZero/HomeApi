@@ -331,3 +331,4 @@ ASALocalRun/
 
 #HomeApi Dist
 HomeApi.Vue/dist/*
+/HomeApi.Vue/.env

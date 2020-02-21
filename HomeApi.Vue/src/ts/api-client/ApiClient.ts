@@ -2,7 +2,11 @@
 import { ILight } from '@/ts/interfaces/ILight';
 
 export class ApiClient {
-    private readonly _server = "http://pi-server";
+    private readonly _server: string;
+
+    constructor() {
+        this._server = process.env.VUE_APP_HOME_API_URL;
+    }
 
     public async listLights(): Promise<ILight[] | null> {
         const response = await this.get("/api/lights/list-lights");
