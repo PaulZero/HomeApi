@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# Change to project directory (this must be updated if you move this script)
-cd ..
+nohup dotnet /var/www/homeapi/HomeApi.Web.dll &
 
-# Pull the latest changes
-git pull
-
-# Build and run the application
-dotnet clean
-dotnet build
-dotnet run
+sudo service nginx restart

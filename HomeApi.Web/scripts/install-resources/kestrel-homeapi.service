@@ -1,0 +1,17 @@
+[Unit]
+Description=HomeApi Web App
+Before=nginx.service
+
+[Service]
+WorkingDirectory=/var/www/homeapi
+ExecStart=/bin/dotnet /var/www/homeapi/HomeApi.Web.dll
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=kestrel-homeapi
+User=www-data
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
