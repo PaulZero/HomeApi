@@ -11,6 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeApi.Libraries", "HomeAp
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "HomeApi.Vue", "HomeApi.Vue\HomeApi.Vue.njsproj", "{A044C73C-3918-4AFF-BAB0-FAF707237C1A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C55436F2-AE19-4C57-B4C6-24955845F4AC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
