@@ -1,10 +1,10 @@
 ﻿import axios from "axios";
-//import { Light } from "@/ts/models/lights/Light";
+import { ILight } from '@/ts/interfaces/ILight';
 
 export class ApiClient {
     private readonly _server = "http://pi-server";
 
-    public async listLights(): Promise<any | null> {
+    public async listLights(): Promise<ILight[] | null> {
         const response = await this.get("/api/lights/list-lights");
 
         if (response && response.hasOwnProperty("data")) {
@@ -17,8 +17,9 @@ export class ApiClient {
     public async setLightState(id: string, brightness: number, isOn: boolean): Promise<void> {
         const params = {
             LightIds: [id],
-            Brightness: brightness,
-            PowerState: isOn
+            Brightness: 255,
+            PowerState: isOn,
+            TransitionMilliseconds: 1000
         };
 
         await this.post("/api/lights/set-light-state", params);

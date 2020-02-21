@@ -52,8 +52,8 @@
     <Folder Include="src\components\lights\" />
     <Folder Include="src\ts\" />
     <Folder Include="src\ts\api-client\" />
-    <Folder Include="src\ts\models\" />
-    <Folder Include="src\ts\models\lights\" />
+    <Folder Include="src\ts\interfaces\" />
+    <Folder Include="src\ts\light-service\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\main.ts" />
@@ -65,7 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="src\ts\api-client\ApiClient.ts" />
-    <TypeScriptCompile Include="src\ts\models\lights\Light.ts" />
+    <TypeScriptCompile Include="src\ts\interfaces\ILight.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\ts\light-service\LightService.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
