@@ -99,6 +99,12 @@ namespace HomeApi.Web.Controllers
             }
         }
 
+        [HttpOptions("set-light-state")]
+        public IActionResult SetLightStateOptions()
+        {
+            return Ok();
+        }
+
         [HttpPost("set-light-state")]
         public async Task<IActionResult> SetLightState([FromBody] SetLightStateRequest request)
         {
