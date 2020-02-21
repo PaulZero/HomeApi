@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace HomeApi.Dashboard.Libraries.DI
@@ -6,7 +6,7 @@ namespace HomeApi.Dashboard.Libraries.DI
     public class ServiceProvider : IServiceProvider
     {
         protected Dictionary<Type, IService> Services { get; } = new Dictionary<Type, IService>();
-        
+
         public void AddService<TService>(TService service)
             where TService : IService
         {
@@ -33,7 +33,7 @@ namespace HomeApi.Dashboard.Libraries.DI
         public TService GetService<TService>()
             where TService : IService
         {
-            return (TService) GetService(typeof(TService));
+            return (TService)GetService(typeof(TService));
         }
 
         public async void Initialise()

@@ -14,20 +14,20 @@ namespace HomeApi.Dashboard.Views.Components.Lighting
     public sealed partial class BrightnessRange : UserControl
     {
         public static readonly DependencyProperty BrightnessPercentagesProperty = DependencyProperty.Register(
-            "BrightnessPercentages", typeof(int[]), typeof(BrightnessRange), new PropertyMetadata(new[] {0, 25, 50, 75, 100}));
+            "BrightnessPercentages", typeof(int[]), typeof(BrightnessRange), new PropertyMetadata(new[] { 0, 25, 50, 75, 100 }));
 
         public static readonly DependencyProperty LightProperty = DependencyProperty.Register(
             "Light", typeof(Light), typeof(BrightnessRange), new PropertyMetadata(default(Light)));
 
         public int[] BrightnessPercentages
         {
-            get => (int[]) GetValue(BrightnessPercentagesProperty);
+            get => (int[])GetValue(BrightnessPercentagesProperty);
             set => SetValue(BrightnessPercentagesProperty, value);
         }
 
         public Light Light
         {
-            get => (Light) GetValue(LightProperty);
+            get => (Light)GetValue(LightProperty);
             set => SetValue(LightProperty, value);
         }
 
@@ -69,11 +69,11 @@ namespace HomeApi.Dashboard.Views.Components.Lighting
                 set
                 {
                     if (_isChecked == value) return;
-                    
+
                     _isChecked = value;
-                    
+
                     NotifyPropertyChanged();
-                } 
+                }
             }
 
             public bool IsEnabled
@@ -83,7 +83,7 @@ namespace HomeApi.Dashboard.Views.Components.Lighting
                 {
                     if (_isEnabled == value) return;
 
-                    _isEnabled = value; 
+                    _isEnabled = value;
 
                     NotifyPropertyChanged();
                 }

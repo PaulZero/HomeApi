@@ -1,4 +1,4 @@
-﻿using Q42.HueApi.Models.Groups;
+using Q42.HueApi.Models.Groups;
 
 namespace HomeApi.Web.Services.Lighting.Hue.Models
 {

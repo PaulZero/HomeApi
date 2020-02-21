@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,7 +32,7 @@ namespace HomeApi.Dashboard.Services.UserInteraction
 
         public IdleService()
         {
-            _timer = new DispatcherTimer {Interval = _timeoutDuration};
+            _timer = new DispatcherTimer { Interval = _timeoutDuration };
 
             _timer.Tick += Timer_Tick;
         }

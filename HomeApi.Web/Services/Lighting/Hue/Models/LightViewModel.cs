@@ -1,4 +1,4 @@
-﻿using HueLight = Q42.HueApi.Light;
+using HueLight = Q42.HueApi.Light;
 using BaseLight = HomeApi.Libraries.Models.Lighting.Light;
 
 namespace HomeApi.Web.Services.Lighting.Hue.Models

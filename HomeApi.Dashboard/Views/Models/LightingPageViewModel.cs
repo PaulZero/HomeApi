@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
 using HomeApi.Dashboard.Services.Lighting;

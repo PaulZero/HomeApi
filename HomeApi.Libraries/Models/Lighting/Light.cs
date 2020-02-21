@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -10,8 +10,8 @@ namespace HomeApi.Libraries.Models.Lighting
     {
         public byte Brightness
         {
-            get => (byte) (255d / (100d / BrightnessPercentage));
-            set => BrightnessPercentage = (int) (255d / 100d * value);
+            get => (byte)(255d / (100d / BrightnessPercentage));
+            set => BrightnessPercentage = (int)(255d / 100d * value);
         }
 
         public int BrightnessPercentage

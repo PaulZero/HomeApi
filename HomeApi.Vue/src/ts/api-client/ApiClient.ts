@@ -1,4 +1,4 @@
-﻿import axios from "axios";
+import axios from "axios";
 import { ILight } from '@/ts/interfaces/ILight';
 
 export class ApiClient {

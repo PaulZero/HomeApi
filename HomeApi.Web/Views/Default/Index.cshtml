@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = null;
 }
 
@@ -10,15 +10,17 @@
     <title>HomeApi</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
     </style>
 </head>
 <body>
     <h1>Getting Started...</h1>
 
-    <p>At present this API supports controlling lights via a single Hue bridge (which you know, is probably fine for most people).
-    You will first of all need to register the API with your Hue bridge.</p>
+    <p>
+        At present this API supports controlling lights via a single Hue bridge (which you know, is probably fine for most people).
+        You will first of all need to register the API with your Hue bridge.
+    </p>
 
     <h2>Step One: Press the big button on your Hue bridge</h2>
 
@@ -26,7 +28,9 @@
 
     <h2>Step Two: Access the registration endpoint</h2>
 
-    <p>You can do this <a href="@Url.Action("Register", "Lighting")">here</a> (if you ignored the first step or didn't even buy a Hue bridge
-    I hope you like errors.</p>
+    <p>
+        You can do this <a href="@Url.Action("Register", "Lighting")">here</a> (if you ignored the first step or didn't even buy a Hue bridge
+        I hope you like errors.
+    </p>
 </body>
 </html>

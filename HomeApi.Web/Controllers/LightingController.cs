@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -46,7 +46,7 @@ namespace HomeApi.Web.Controllers
             {
                 var isConnected = await lighting.GetConnectionStatusAsync();
 
-                return StandardResponse(true, new {isConnected});
+                return StandardResponse(true, new { isConnected });
             }
             catch (Exception exception)
             {

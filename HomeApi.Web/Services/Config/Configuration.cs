@@ -1,4 +1,4 @@
-﻿using HomeApi.Web.Services.Lighting.Config;
+using HomeApi.Web.Services.Lighting.Config;
 
 namespace HomeApi.Web.Services.Config
 {

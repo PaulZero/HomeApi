@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -12,7 +12,7 @@ namespace HomeApi.Dashboard.Views.Models
 {
     public class DashboardViewModel : AbstractViewModel
     {
-        protected LightingService Lighting { get;  }
+        protected LightingService Lighting { get; }
 
         protected IdleService IdleService { get; }
 
@@ -26,7 +26,7 @@ namespace HomeApi.Dashboard.Views.Models
             set
             {
                 if (_interfaceVisibility == value) return;
-                
+
                 _interfaceVisibility = value;
 
                 NotifyPropertyChanged();
@@ -56,12 +56,12 @@ namespace HomeApi.Dashboard.Views.Models
             {
                 return;
             }
-            
+
             var request = new SetLightState();
 
             await request.Execute(new SetLightStateRequest
             {
-                LightIds = new[] {light.Id},
+                LightIds = new[] { light.Id },
                 PowerState = !light.IsOn
             });
 

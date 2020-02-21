@@ -43,7 +43,7 @@ namespace HomeApi.Web.Controllers
         {
             if (Config.IsDevelopmentMode) LogResponse("Bad Request", error);
 
-            return base.BadRequest(error ?? new {error = "Null object passed to BadRequest :'("});
+            return base.BadRequest(error ?? new { error = "Null object passed to BadRequest :'(" });
         }
 
         public override OkResult Ok()

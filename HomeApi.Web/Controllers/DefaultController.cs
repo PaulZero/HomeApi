@@ -1,4 +1,4 @@
-﻿using HomeApi.Web.Services.Config;
+using HomeApi.Web.Services.Config;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
